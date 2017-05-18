@@ -25,19 +25,25 @@ public class PlayerMovement : MonoBehaviour {
     private void Update()
     {
 
-        Vector3 dir = Vector3.zero;
-        dir.x = Input.GetAxis("Horizontal");
-        dir.z = Input.GetAxis("Vertical");
+        Vector3 joypad = Vector3.zero;
+        joypad.x = Input.GetAxis("Horizontal");
+        joypad.z = Input.GetAxis("Vertical");
 
-        if (dir.magnitude > 1)
-            dir.Normalize();
+        if (joypad.magnitude > 1)
+            joypad.Normalize();
 
         if (moveJoystick.inputDirection != Vector3.zero)
         {
-            dir = moveJoystick.inputDirection;
+            joypad = moveJoystick.inputDirection;
         }
-
-        controller.AddForce(dir * moveSpeed);
+        
+        Vector3 camera= Camera.main.transform.forward;
+        camera.y = transform.position.y;
+        camera.normalize();
+        
+        Vector3 dir = camera * joypad;
+        
+        controller.addForce(dir * moveSpeed);
 
         Vector3 tilt = Input.acceleration;
 
